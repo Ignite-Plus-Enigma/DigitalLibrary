@@ -1,13 +1,14 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import AudioFile from './Components/AudioFile'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h2>Hello World!</h2>
-      </header>
+    <div>
+      {/* <header className="App-header"> */}
+        <AudioFile/>
+      {/* </header> */}
     </div>
   );
 }
