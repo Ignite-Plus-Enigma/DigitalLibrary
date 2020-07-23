@@ -157,3 +157,6 @@ code {
     border-radius: 1em;
     border: 1px solid white;
 }
+.search-result-ul{
+  list-style:none;
+}
