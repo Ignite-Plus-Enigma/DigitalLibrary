@@ -10,9 +10,31 @@ export default class AudioFile extends Component{
         this.state = {
             toggleButton:"►",
             currentTime:0,
-            duration: null
+            duration: null,
+            bookName:'The fault in our stars',
+            author:'John Green',
+            genre:'Romance,Teenage Fiction',
+            imageUri:'https://i.pinimg.com/originals/f7/3a/5b/f73a5b4b7262440684a2b5c39e684304.jpg',
+            googleDriveUri:'https://drive.google.com/file/d/1qbxMkviO6ka-5es6wZIu9Y8wjbGF6eSY/view?usp=sharing',
+            embeddingBookUri:null,
+            description:'The book revolves around a young teenage girl, Hazel who has been diagnosed with lung cancer and attends a cancer support group. Hazel is 16 and is reluctant to go to the support group, but she soon realises that it was a good idea after she meets a young boy named Augustus Waters.'
         }
     }
+    /*BookUrl : https://drive.google.com/file/d/1qbxMkviO6ka-5es6wZIu9Y8wjbGF6eSY/view?usp=sharing
+    ImageUrl:: https://drive.google.com/file/d/0B63R3oK4tsKVX195X2k4dnZyOC1KV0lQTHBBUzNwM3ZfNnhv/view?usp=sharing
+    RandomGoogleImage: https://i.pinimg.com/originals/f7/3a/5b/f73a5b4b7262440684a2b5c39e684304.jpg*/
+    playAudio = () => {
+        const audioEl = document.querySelector(".viewer");
+        console.log("Button prssed");
+        if(audioEl.paused){
+            audioEl.play();
+            this.setState({toggleButton : "❚ ❚"});
+        }
+        else{
+            audioEl.pause();
+            this.setState({toggleButton : '►'});
+        }
+      }
     //Converts time in seconds from parameter to the desired format of min:seconds
     getTime = (time) => {
         if(!isNaN(time)){
@@ -30,30 +52,42 @@ export default class AudioFile extends Component{
 
     handleKeyDown = (e) => {
         switch(e.keyCode ) {
-            case 80:
+            case 32:
                 this.playAudio();
                 break;
-            // case 70:
-            //     videoSkip = (e) => {
-            //         const video = document.querySelector('.viewer');
-            //         const skipValue = e.target.dataset.skip;
-            //         video.currentTime+=parseFloat(skipValue);
-            //     }
-            //     break;
-            // case 82:
-            //     videoSkip = (e) => {
-            //         const video = document.querySelector('.viewer');
-            //         const skipValue = e.target.dataset.skip;
-            //         video.currentTime+=parseFloat(skipValue);
-            //     }
-            //     break;
+            case 70:
+                const video = document.querySelector('.viewer');
+                video.currentTime+=parseFloat(25);
+                break;
+            case 82:
+                const audio = document.querySelector('.viewer');
+                audio.currentTime+=parseFloat(-10);
+                break;
             default: 
                 break;
         }
     }
     /*Life cycle methods*/
     componentDidMount(){
-        const video = document.querySelector('.viewer');
+        const uniqueId = this.props.id;
+        let apiSearchEndpoint = 'http://localhost:8080/api/search/';
+        apiSearchEndpoint+=uniqueId;
+        // axios.get(apiSearchEndpoint).then((response) => {
+        //     this.setState({bookName:response.name,
+        //     author:response.author,
+        //     genre:response.genre,
+        //     imageUri:response.imageUri,
+        //     description:response.description,
+        //     googleDriveUri:response.cloudBookUri
+        //     });
+        // });
+        var googleBookId = this.state.googleDriveUri.split('/file/d/')[1].split('/view')[0];
+        var finalUri = 'https://docs.google.com/uc?export=download&id='+googleBookId;
+        this.setState({embeddingBookUri:finalUri});
+        
+
+        document.addEventListener('DOMContentLoaded',()=>{
+            const video = document.querySelector('.viewer');
         video.addEventListener('timeupdate',this.progressUpdate);
         /*Updates the current time every second*/
         setInterval(() => this.setState({currentTime:this.getTime(video.currentTime)}),1000);
@@ -61,16 +95,11 @@ export default class AudioFile extends Component{
             this.setState({duration:this.getTime(video.duration)});
           });
         document.addEventListener("keydown", this.handleKeyDown);
-        document.onkeyup = (e) => {
-                var evt = window.event || e;   
-                    if (evt.keyCode === 70){
-                        video.currentTime+=parseFloat(25);
-                    } 
-                    if(evt.keyCode === 82) {
-                        video.currentTime+=parseFloat(-10);
-                    }
-         }
+        });
+        
     }
+
+    
     
     componentWillUnmount(){
         const video = document.querySelector('.viewer');
@@ -94,41 +123,34 @@ export default class AudioFile extends Component{
     //     const scrubTime=(e.offsetX/progress.offsetWidth)*video.duration;
     //     video.currentTime=scrubTime;
     // }
-    playAudio = () => {
-        const audioEl = document.getElementsByClassName("audio-player")[0]
-        if(audioEl.paused){
-            audioEl.play();
-            console.log(this);
-            this.setState({toggleButton : "❚ ❚"});
-        }
-        else{
-            audioEl.pause();
-            this.setState({toggleButton : '►'});
-        }
-      }
+    
+    
     
     render(){
         return (
             <div>
-                <h2 className = "book-name">The fault  in our Stars</h2>
-                <h3 className = "author-name">John Green</h3>
+                <h2 className = "book-name">{this.state.bookName}</h2>
+                <h3 className = "author-name">{this.state.author}</h3>
+                <h6 className = "audio-book-genre">{this.state.genre}</h6>
+                {/* {window.location.origin + '/Audio/The Vamps-Wake Up.mp3'}  */}
                 <div className = "player">
-                    <audio className = "audio-player viewer" src = {window.location.origin + '/Audio/The Vamps-Wake Up.mp3'} alt = "Image of book" ></audio>
+                    <audio className = "audio-player viewer" src = {this.state.embeddingBookUri} ></audio>
+                    <img src={this.state.imageUri} alt= "Book image"/>
                 </div>
-                <span className = "current-duration" role="timer">{this.state.currentTime}</span>
-                <span className = "total-duration" tabindex="0" aria-label="Total duration">{this.state.duration}</span>
-                <div class="progress-bar">
+                <div className="progress-bar" role="timer">
                     <div className="progress-filled"></div>
+                    <span className = "current-duration" role="timer" aria-label="current duration">{this.state.currentTime}</span>
+                    <span className = "total-duration" aria-label="Total duration">{this.state.duration}</span>
                 </div>
                 <div className="player-controls div-for-settings">
-                    <button data-skip="-10" className="player-skip" onClick={this.videoSkip}>« 10s</button>
-                    <button className="player-button toggle" title="Toggle Play" onClick={this.playAudio}>{this.state.toggleButton}</button>
-                    <button data-skip="25" className="player-skip" onClick={this.videoSkip}>25s »</button>
+                    <button data-skip="-10" className="player-skip" onClick={this.videoSkip} aria-label="10 seconds rewind button">« 10s</button>
+                    <button className="player-button toggle" title="Toggle Play" onClick={this.playAudio} aria-label="Play or pause button">{this.state.toggleButton}</button>
+                    <button data-skip="25" className="player-skip" onClick={this.videoSkip} aria-label="25 seconds forward button">25s »</button>
                     <i className = "fa fa-cog" role="button"></i>
                 </div>
                 <div className="player-controls">
-                    <label for ="volume" className = "range-label">Volume</label>
-                    <select name ="volume" defaultValue="0.5" className="range-select" onChange = {this.handleRangeUpdate}>
+                    <label htmlFor ="volume" className = "range-label">Volume</label>
+                    <select name ="volume" defaultValue="0.5" className="range-select" onChange = {this.handleRangeUpdate} aria-label="Volume dropdown">
                         <option value="0.1">10%</option>
                         <option value="0.2">20%</option>
                         <option value="0.3">30%</option>
@@ -141,8 +163,8 @@ export default class AudioFile extends Component{
                         <option value="1.0">100%</option>
                     </select>
                     
-                    <label className = "range-label" for="playbackRate">Speed</label>
-                    <select name ="playbackRate" defaultValue="1" className="range-select" onChange = {this.handleRangeUpdate}>
+                    <label className = "range-label" htmlFor="playbackRate">Speed</label>
+                    <select name ="playbackRate" defaultValue="1" className="range-select" onChange = {this.handleRangeUpdate} aria-label="Speed dropdown">
                         <option value="0.25">0.25x</option>
                         <option value="0.5">0.5x</option>
                         <option value="0.75">0.75x</option>
@@ -156,9 +178,7 @@ export default class AudioFile extends Component{
                 <div>
                     <h5 className="book-recommendation-heading">Description</h5>
                     <p className = "audio-description">
-                    The book revolves around a young teenage girl, Hazel who has been diagnosed with lung cancer 
-                    and attends a cancer support group. Hazel is 16 and is reluctant to go to the support group, 
-                    but she soon realises that it was a good idea after she meets a young boy named Augustus Waters.
+                        {this.state.description}
                     </p>
                 </div>
                 <div>

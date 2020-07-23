@@ -82,7 +82,7 @@ code {
   height: 20rem;
   font-size: 0;
   overflow: hidden;
-  background-image: url("https://i.pinimg.com/originals/f7/3a/5b/f73a5b4b7262440684a2b5c39e684304.jpg")
+  /* background-image: url("https://i.pinimg.com/originals/f7/3a/5b/f73a5b4b7262440684a2b5c39e684304.jpg") */
 }
 .toggle{
   border-radius: 50%;
@@ -101,13 +101,15 @@ code {
 }
 .current-duration{
   position: absolute;
-    bottom: 31%;
-    left: 5%;
+    top:75%;
+    left: 0%;
+    color: black;
 }
 .total-duration{
   position: absolute;
-    bottom: 31%;
-    right: 5%;
+    top:75%;
+    right: 0%;
+    color:black;
 }
 .audio-description{
   margin: 1.2em;
@@ -125,6 +127,10 @@ code {
 }
 .div-for-settings{
   position:relative;
+}
+.audio-book-genre{
+  margin-left: 2.7em;
+    color: crimson;
 }
 /*Css for the Upload component*/
 
