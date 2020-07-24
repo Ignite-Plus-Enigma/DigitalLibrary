@@ -1,6 +1,8 @@
 import React from 'react'
 import {Component} from 'react';
 import { Card, Button, CardGroup } from 'react-bootstrap';
+import { Link, Route } from 'react-router-dom';
+import AudioFile from './AudioFile'
 export default class SearchResult extends Component {
     constructor(props){
         super(props);
@@ -47,8 +49,8 @@ export default class SearchResult extends Component {
                     <Card.Text>
                         {book.description}
                     </Card.Text>
-                    {book.format.includes('audio') ? <Card.Link href="#">Audio Book</Card.Link> : null}
-                    {book.format.includes('pdf') ? <Card.Link href="#">Pdf Book</Card.Link> : null}
+                    {book.format.includes('audio') ? <Card.Link href="/audio">Audio Book</Card.Link> : null}
+                    {book.format.includes('pdf') ? <Card.Link href="/pdf">Pdf Book</Card.Link> : null}
                 
                     </Card.Body>
                 </Card>

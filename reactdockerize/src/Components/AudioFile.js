@@ -16,13 +16,14 @@ export default class AudioFile extends Component{
             genre:'Romance,Teenage Fiction',
             driveImageUri:'https://drive.google.com/file/d/0B63R3oK4tsKVX195X2k4dnZyOC1KV0lQTHBBUzNwM3ZfNnhv/view?usp=sharing',
             driveBookUri:'https://drive.google.com/file/d/1qbxMkviO6ka-5es6wZIu9Y8wjbGF6eSY/view?usp=sharing',
-            embeddingBookUri:null,
-            imageUri:'https://drive.google.com/uc?export=view&id=',
+            embeddingBookUri:'https://docs.google.com/uc?export=download&id=1qbxMkviO6ka-5es6wZIu9Y8wjbGF6eSY',
+            imageUri:'https://i.pinimg.com/originals/f7/3a/5b/f73a5b4b7262440684a2b5c39e684304.jpg',
             description:'The book revolves around a young teenage girl, Hazel who has been diagnosed with lung cancer and attends a cancer support group. Hazel is 16 and is reluctant to go to the support group, but she soon realises that it was a good idea after she meets a young boy named Augustus Waters.'
         }
     }
     /*BookUrl : https://drive.google.com/file/d/1qbxMkviO6ka-5es6wZIu9Y8wjbGF6eSY/view?usp=sharing
     ImageUrl:: https://drive.google.com/file/d/0B63R3oK4tsKVX195X2k4dnZyOC1KV0lQTHBBUzNwM3ZfNnhv/view?usp=sharing
+    Image URi: header for gogle drive https://drive.google.com/uc?export=view&id=
     RandomGoogleImage: https://i.pinimg.com/originals/f7/3a/5b/f73a5b4b7262440684a2b5c39e684304.jpg*/
     playAudio = () => {
         const audioEl = document.querySelector(".viewer");
@@ -83,11 +84,11 @@ export default class AudioFile extends Component{
         //     googleDriveUri:response.cloudBookUri
         //     });
         // });
-        var googleBookId = this.state.driveBookUri.split('/file/d/')[1].split('/view')[0];
-        var finalUri = 'https://docs.google.com/uc?export=download&id='+googleBookId;
-        this.setState({embeddingBookUri:finalUri});
-        var imageId = this.state.driveImageUri.split('/file/d/')[1].split('/view')[0];
-        this.setState({imageUri:this.state.imageUri+imageId});
+        //var googleBookId = this.state.driveBookUri.split('/file/d/')[1].split('/view')[0];
+        // var finalUri = 'https://docs.google.com/uc?export=download&id='+googleBookId;
+        // this.setState({embeddingBookUri:finalUri});
+        // var imageId = this.state.driveImageUri.split('/file/d/')[1].split('/view')[0];
+        // this.setState({imageUri:this.state.imageUri+imageId});
 
         document.addEventListener('DOMContentLoaded',()=>{
             const video = document.querySelector('.viewer');
